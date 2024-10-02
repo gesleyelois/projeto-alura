@@ -19,7 +19,6 @@ Não há respostas certas ou erradas, queremos avaliar como você aplica conceit
 1. Faça o upload do template inicial do projeto no seu repositório GitHub e mantenha-o público (seus commits serão avaliados).
 2. Importe o projeto na IDE de sua escolha.
 3. O código deve ser todo escrito em inglês, mesmo que os requisitos estejam em português.
-4. Os bônus são opcionais e não precisam seguir uma ordem específica. Escolha os que preferir realizar.
 
 ## Desafio
 
