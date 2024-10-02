@@ -95,4 +95,4 @@ Agora que temos usuários e matrículas, queremos gerar um relatório para ident
 - O uso de ferramentas de IA é permitido, mas o código gerado deve ser revisado. Caso avance para a próxima etapa, a entrevista técnica será baseada no código que você produziu.
 
 > [!TIP]
-> Para uma melhor organização dos commits, considere seguir as [Convenções de Commits](https://www.conventionalcommits.org/en/v1.0.0/). Isso ajuda a manter um histórico claro e compreensível do projeto.
+> Para uma melhor organização dos commits, considere seguir as [convenções de commits](https://www.conventionalcommits.org/pt-br/v1.0.0/). Isso ajuda a manter um histórico claro e compreensível do projeto.
