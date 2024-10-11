@@ -2,6 +2,7 @@ package br.com.alura.ProjetoAlura.user;
 
 import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +16,13 @@ import java.util.List;
 @RestController
 public class UserController {
 
+    @Autowired
     private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     @PostMapping("/user/newStudent")
     public ResponseEntity newStudent(@RequestBody @Valid NewStudentUserDTO newStudent) {
         if(userRepository.existsByEmail(newStudent.getEmail())) {

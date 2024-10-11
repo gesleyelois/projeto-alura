@@ -1,5 +1,7 @@
 package br.com.alura.ProjetoAlura.registration;
 
+import br.com.alura.ProjetoAlura.course.Course;
+import br.com.alura.ProjetoAlura.user.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,5 +34,7 @@ public class NewRegistrationDTO {
     public void setStudentEmail(String studentEmail) {
         this.studentEmail = studentEmail;
     }
+
+    public Enrollment toModel(User user, Course course) { return new Enrollment(user, course);}
 
 }
