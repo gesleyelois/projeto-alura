@@ -4,16 +4,17 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class NewRegistrationDTO {
 
-    @NotBlank
-    @NotNull
-    private String courseCode;
+public class NewRegistrationDTO {
 
     @NotBlank
     @NotNull
     @Email
     private String studentEmail;
+
+    @NotBlank
+    @NotNull
+    private String courseCode;
 
     public NewRegistrationDTO() {}
 
@@ -31,6 +32,10 @@ public class NewRegistrationDTO {
 
     public void setStudentEmail(String studentEmail) {
         this.studentEmail = studentEmail;
+    }
+
+    public Registration toModel() {
+        return new Registration(studentEmail, courseCode);
     }
 
 }
