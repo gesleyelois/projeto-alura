@@ -2,10 +2,12 @@ package br.com.alura.ProjetoAlura.user;
 
 import br.com.alura.ProjetoAlura.util.EncryptUtil;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import static br.com.alura.ProjetoAlura.user.Role.STUDENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 class UserTest {
 
     @Test
