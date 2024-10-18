@@ -1,0 +1,14 @@
+package br.com.alura.ProjetoAlura.course;
+
+import br.com.alura.ProjetoAlura.course.Course;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface CourseRepository extends JpaRepository<Course, Long> {
+
+    boolean existsByCode(String code);
+
+    Optional<Course> findByCode(String code);
+
+}
