@@ -17,8 +17,25 @@ public class RegistrationController {
     @PostMapping("/registration/new")
     public ResponseEntity createCourse(@Valid @RequestBody NewRegistrationDTO newRegistration) {
         // TODO: Implementar a Questão 3 - Criação de Matrículas aqui...
+         Course course = courseRepository.findByCode(newRegistration.getCourseCode());
+        if (course == null || course.getStatus() != CourseStatus.ACTIVE) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Curso inválido ou inativo
+        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        // Verifique se o usuário já está matriculado
+        if (registrationRepository.existsByUserIdAndCourseCode(newRegistration.getUserId(), newRegistration.getCourseCode())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Conflito, matrícula já existe
+        }
+
+        // Criar nova matrícula
+        Registration registration = new Registration();
+        registration.setUserId(newRegistration.getUserId());
+        registration.setCourse(course);
+        registration.setRegistrationDate(LocalDateTime.now());
+
+        registrationRepository.save(registration);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build(); 
     }
 
     @GetMapping("/registration/report")
@@ -27,32 +44,17 @@ public class RegistrationController {
 
         // TODO: Implementar a Questão 4 - Relatório de Cursos Mais Acessados aqui...
 
-        // Dados fictícios abaixo que devem ser substituídos
-        items.add(new RegistrationReportItem(
-                "Java para Iniciantes",
-                "java",
-                "Charles",
-                "charles@alura.com.br",
-                10L
-        ));
+        List<CourseReport> reportData = registrationRepository.findTopCourses(); // Suponha que você tenha esse método no repositório
 
-        items.add(new RegistrationReportItem(
-                "Spring para Iniciantes",
-                "spring",
-                "Charles",
-                "charles@alura.com.br",
-                9L
-        ));
-
-        items.add(new RegistrationReportItem(
-                "Maven para Avançados",
-                "maven",
-                "Charles",
-                "charles@alura.com.br",
-                9L
-        ));
+        for (CourseReport report : reportData) {
+            items.add(new RegistrationReportItem(
+                report.getCourseName(),
+                report.getCourseCode(),
+                report.getUserName(),
+                report.getUserEmail(),
+                report.getRegistrationCount()
+            ));
+        }
 
         return ResponseEntity.ok(items);
     }
-
-}
