@@ -40,7 +40,7 @@ public class CourseController {
         // TODO: Implementar a Questão 1 - Cadastro de Cursos aqui...
 
         User instructor =
-                userRepository.findUserById(newCourse.getInstructorId());
+                userRepository.findByEmail(newCourse.getInstructorEmail());
 
         if (!instructor.getRole().equals((Role.INSTRUCTOR))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -50,12 +50,15 @@ public class CourseController {
         }
 
         if (!newCourse.getCode().matches("[a-z\\-]+") || newCourse.getCode().length() < 4 || newCourse.getCode().length() > 10) {
-            return ResponseEntity.badRequest().body("Código de curso inválido. O código do curso deve conter apenas " +
-                    "letras e hífen e ter entre 4 e 10 caracteres.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(new ErrorItemDTO("invalid-code", "Código de curso inválido. O código do curso deve " +
+                                    "conter " +
+                                    "apenas letras e hífen e ter entre 4 e 10 caracteres."));
         }
 
         if (courseRepository.existsByCode(newCourse.getCode())) {
-            return ResponseEntity.badRequest().body("Código já cadastrado no sistema");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorItemDTO("code", "Código já cadastrado no sistema"));
         }
 
         Course course = newCourse.toModel(instructor);
@@ -69,12 +72,19 @@ public class CourseController {
         // TODO: Implementar a Questão 2 - Inativação de Curso aqui...
         Course course = courseRepository.findByCode(courseCode);
 
-        if (course == null) {
-            return ResponseEntity.notFound().build();
+        if (!courseRepository.existsByCode(courseCode)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorItemDTO("code-null", "Código de curso não localizado."));
         }
 
-        course.inactivateCourse();
-        courseRepository.save(course);
+        if (course.getStatus() == Status.INACTIVE) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorItemDTO("status-inactive", "Curso já está inativado."));
+        } else {
+            course.inactivateCourse();
+            courseRepository.save(course);
+        }
+
         return ResponseEntity.ok().build();
     }
 

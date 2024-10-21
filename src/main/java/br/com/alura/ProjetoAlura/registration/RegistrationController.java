@@ -4,8 +4,8 @@ import br.com.alura.ProjetoAlura.course.Course;
 import br.com.alura.ProjetoAlura.course.CourseRepository;
 import br.com.alura.ProjetoAlura.course.Status;
 import br.com.alura.ProjetoAlura.user.User;
-import br.com.alura.ProjetoAlura.user.UserListItemDTO;
 import br.com.alura.ProjetoAlura.user.UserRepository;
+import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class RegistrationController {
@@ -45,40 +45,24 @@ public class RegistrationController {
         Course course = courseRepository.findByCode(newRegistration.getCourseCode());
 
         if (course.getStatus().equals(Status.INACTIVE)) {
-            return ResponseEntity.badRequest().body("Não é possível se matricular em um curso inativo.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorItemDTO("course-inactive", "Não é possível se matricular em um curso inativo."));
         }
 
         if (registrationRepository.existsByUserAndCourse(user, course)) {
-            return ResponseEntity.badRequest().body("Você já está matriculado neste curso.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorItemDTO("registration", "Você já está matriculado neste curso."));
         }
 
-        Enrollment enrollment = newRegistration.toModel(user, course);
+        Registration registration = newRegistration.toModel(user, course);
 
-        registrationRepository.save(enrollment);
+        registrationRepository.save(registration);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/registration/report")
-    public ResponseEntity<List<RegistrationReportItem>> report() {
-        List<RegistrationReportItem> items = new ArrayList<>();
-        // TODO: Implementar a Questão 4 - Relatório de Cursos Mais Acessados aqui...
-
-        for (Object[] row : courseRepository.findCoursesWithEnrollmentCount()) {
-            String courseName = (String) row[0];
-            String courseCode = (String) row [1];
-            String instructorName = (String) row [2];
-            String instructorEmail = (String) row [3];
-            Long totalEnrollments = (Long) row [4];
-
-            items.add(new RegistrationReportItem(
-                    courseName,
-                    courseCode,
-                    instructorName,
-                    instructorEmail,
-                    totalEnrollments
-            ));
-        }
-
+    public ResponseEntity<List<RegistrationReportItemProjection>> report() {
+        List<RegistrationReportItemProjection> items = courseRepository.findCoursesWithEnrollmentCount();
         return ResponseEntity.ok(items);
     }
 

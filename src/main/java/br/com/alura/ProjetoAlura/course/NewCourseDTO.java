@@ -21,13 +21,22 @@ public class NewCourseDTO {
 
     private String description;
 
-    private Long instructorId;
+    @NotNull
+    @NotBlank
+    @Email
+    private String instructorEmail;
+
+    private Status status;
 
     public NewCourseDTO() {
     }
 
-    public Long getInstructorId() {
-        return instructorId;
+    public String getInstructorEmail() {
+        return instructorEmail;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public String getName() {
@@ -50,8 +59,8 @@ public class NewCourseDTO {
         return description;
     }
 
-    public void setInstructorId(Long instructorId) {
-        this.instructorId = instructorId;
+    public void setInstructorEmail(String instructorEmail) {
+        this.instructorEmail = instructorEmail;
     }
 
     public void setDescription(String description) {

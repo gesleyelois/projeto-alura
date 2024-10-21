@@ -1,6 +1,7 @@
 package br.com.alura.ProjetoAlura.course;
 
 import br.com.alura.ProjetoAlura.user.User;
+import br.com.alura.ProjetoAlura.util.ErrorItemDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,11 +14,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "course")
+@Table(name = "Course")
 public class Course {
 
 

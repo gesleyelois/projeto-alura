@@ -8,12 +8,12 @@ public class RegistrationReportItem {
     private final String instructorEmail;
     private final Long totalRegistrations;
 
-    public RegistrationReportItem(String courseName, String courseCode, String instructorName, String instructorEmail, Long totalRegistrations) {
-        this.courseName = courseName;
-        this.courseCode = courseCode;
-        this.instructorName = instructorName;
-        this.instructorEmail = instructorEmail;
-        this.totalRegistrations = totalRegistrations;
+    public RegistrationReportItem(RegistrationReportItemProjection projection) {
+        this.courseName = projection.getCourseName();
+        this.courseCode = projection.getCourseCode();
+        this.instructorName = projection.getInstructorName();
+        this.instructorEmail = projection.getInstructorEmail();
+        this.totalRegistrations = projection.getTotalRegistrations();
     }
 
     public String getCourseName() {

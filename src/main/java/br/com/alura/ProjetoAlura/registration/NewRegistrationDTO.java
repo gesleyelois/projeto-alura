@@ -35,6 +35,6 @@ public class NewRegistrationDTO {
         this.studentEmail = studentEmail;
     }
 
-    public Enrollment toModel(User user, Course course) { return new Enrollment(user, course);}
+    public Registration toModel(User user, Course course) { return new Registration(user, course);}
 
 }
